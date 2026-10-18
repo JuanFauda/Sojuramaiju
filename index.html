@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sojuramaiju — Alquiler temporario en La Falda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pine: #2E5E4E;
+    --pine-dark: #1F4337;
+    --clay: #A6761F;
+    --clay-light: #F4B942;
+    --sand: #F7E3B0;
+    --paper: #FCF8EB;
+    --ink: #22302A;
+    --sage: #6BA58A;
+    --gold: #F4B942;
+    --line: rgba(34,48,42,0.14);
+    font-family: 'Karla', sans-serif, system-ui;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    background-image:
+      radial-gradient(circle at 15% 8%, rgba(126,147,112,0.10), transparent 40%),
+      radial-gradient(circle at 90% 20%, rgba(176,86,47,0.06), transparent 45%);
+  }
+  /* Página fija en modo claro: no sigue el tema oscuro del dispositivo */
+  img { max-width: 100%; }
+  h1, h2, h3 { font-family: 'Fraunces', serif; font-weight: 500; margin: 0; line-height: 1.15; }
+  p { line-height: 1.6; margin: 0; }
+  a { color: inherit; }
+
+  /* draft banner */
+  .draft-flag {
+    background: var(--gold); color: #241d0d; text-align: center;
+    font-size: 0.85rem; font-weight: 700; padding: 9px 16px;
+    padding-top: calc(9px + env(safe-area-inset-top, 0px));
+  }
+
+  header { position: sticky; top: 0; z-index: 20; background: var(--paper); border-bottom: 1px solid var(--line); }
+  .nav { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; }
+  .brand span { color: var(--clay); }
+  .logo-mark { width: 34px; height: 34px; flex-shrink: 0; }
+  .logo-mark.lg { width: 64px; height: 64px; }
+  .nav-links { display: flex; gap: 20px; font-size: 0.92rem; }
+  .nav-links a { text-decoration: none; opacity: 0.75; }
+  .nav-links a:hover { opacity: 1; }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  .hero { position: relative; overflow: hidden; padding: 64px 24px 0; background: linear-gradient(180deg, var(--sand) 0%, var(--paper) 100%); }
+  .hero-inner { max-width: 720px; margin: 0 auto; text-align: center; position: relative; z-index: 2; }
+  .hero-tag { color: var(--clay); font-size: 1.05rem; display: block; margin-bottom: 10px; font-family: 'Fraunces', serif; font-style: italic; }
+  .hero h1 { font-size: clamp(2rem, 6vw, 3.2rem); }
+  .hero p.lead { margin-top: 16px; font-size: 1.08rem; max-width: 520px; margin: 16px auto 0; opacity: 0.85; }
+  .hero-cta { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 0.94rem; border: 1.5px solid transparent; transition: transform .15s; }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--clay); color: #fff; }
+  .btn-ghost { border-color: var(--ink); color: var(--ink); }
+  .sierras { width: 100%; height: auto; display: block; margin-top: 40px; }
+
+  section { max-width: 1080px; margin: 0 auto; padding: 60px 24px; }
+  .section-head { max-width: 580px; margin-bottom: 36px; }
+  .section-head h2 { font-size: clamp(1.55rem, 4vw, 2.1rem); }
+  .section-head p { margin-top: 10px; opacity: 0.78; font-size: 1.02rem; }
+  .placeholder-note { display: inline-block; margin-top: 14px; font-size: 0.78rem; background: var(--sand); border-radius: 999px; padding: 5px 12px; opacity: 0.75; }
+
+  /* --- placeholder art panel (stands in for photos) --- */
+  .art-panel {
+    border-radius: 4px; overflow: hidden; position: relative;
+    background: linear-gradient(135deg, var(--sage) 0%, var(--pine) 100%);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 180px;
+  }
+  .art-panel svg { width: 46%; opacity: 0.85; }
+  .art-panel.clay { background: linear-gradient(135deg, var(--clay-light) 0%, var(--clay) 100%); }
+  .art-panel.sand-tone { background: linear-gradient(135deg, #D8C9A0 0%, var(--sand) 100%); }
+  .art-panel.sand-tone svg { opacity: 0.55; }
+  .art-panel img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* --- galería de fotos --- */
+  .stay-card .art-panel.gallery { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; min-height: 220px; }
+  .stay-card .art-panel.gallery img { flex: 0 0 100%; height: 220px; scroll-snap-align: start; }
+  .gallery-wrap { position: relative; }
+  .gallery { scrollbar-width: none; }
+  .gallery::-webkit-scrollbar { display: none; }
+  .g-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 36px; height: 36px; border-radius: 50%; border: none;
+    background: rgba(252,248,235,0.92); color: var(--pine);
+    font-size: 1.5rem; line-height: 1; cursor: pointer;
+  }
+  .g-btn.prev { left: 10px; }
+  .g-btn.next { right: 10px; }
+
+  /* --- zoom de fotos (lightbox) --- */
+  .gallery img { cursor: zoom-in; }
+  .lightbox {
+    position: fixed; inset: 0; z-index: 100; padding: 24px;
+    background: rgba(20,28,24,0.92);
+    display: none; align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px; }
+  .lb-btn {
+    position: absolute; width: 44px; height: 44px; border: none; border-radius: 50%;
+    background: rgba(252,248,235,0.92); color: var(--pine);
+    font-size: 1.6rem; line-height: 1; cursor: pointer;
+  }
+  .lb-close { top: 16px; right: 16px; }
+  .lb-prev { left: 16px; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 16px; top: 50%; transform: translateY(-50%); }
+
+  /* --- anfitriones --- */
+  .hosts { display: grid; grid-template-columns: 220px 1fr; gap: 32px; align-items: center; }
+  @media (max-width: 640px) { .hosts { grid-template-columns: 1fr; } }
+  .hosts .art-panel { min-height: 220px; border-radius: 999px; aspect-ratio: 1/1; }
+  .hosts .art-panel svg { width: 52%; }
+  .hosts h3 { font-size: 1.4rem; margin-bottom: 8px; }
+  .hosts .years { display: inline-block; font-size: 0.82rem; font-weight: 700; color: var(--clay); background: var(--sand); padding: 4px 12px; border-radius: 999px; margin-bottom: 14px; }
+  .hosts p { opacity: 0.85; }
+
+  /* --- stays --- */
+  .stays { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+  .stay-card { background: var(--paper); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; }
+  .stay-card .art-panel { min-height: 150px; border-radius: 0; }
+  .stay-card .body { padding: 24px 24px 26px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
+  .stay-card .cap { font-size: 0.84rem; color: var(--sage); font-weight: 700; }
+  .stay-card h3 { font-size: 1.35rem; }
+  .stay-card p.desc { opacity: 0.85; font-size: 0.96rem; }
+  .amenities { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .amenity { font-size: 0.8rem; padding: 5px 10px; background: var(--sand); border-radius: 999px; opacity: 0.9; }
+  .stay-price { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; align-items: baseline; }
+  .stay-price .from { font-size: 0.78rem; opacity: 0.65; }
+  .stay-price .amount { font-family: 'Fraunces', serif; font-size: 1.3rem; color: var(--clay); }
+
+  /* --- qué hacer --- */
+  .activities { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .activity-card { border: 1px solid var(--line); border-radius: 4px; padding: 20px; display: flex; gap: 14px; align-items: flex-start; }
+  .activity-card svg { width: 26px; height: 26px; flex-shrink: 0; color: var(--clay); margin-top: 2px; }
+  .activity-card h4 { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 500; margin-bottom: 4px; }
+  .activity-card p { font-size: 0.9rem; opacity: 0.75; }
+
+  /* --- precios --- */
+  .price-tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+  .price-card { border: 1px solid var(--line); border-radius: 4px; padding: 26px; }
+  .price-card h3 { font-size: 1.2rem; margin-bottom: 16px; }
+  .price-line { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 0.94rem; }
+  .price-line:last-of-type { border-bottom: none; }
+  .price-line .val { font-weight: 700; }
+  .price-line small { display: block; font-size: 0.8rem; opacity: 0.65; margin-top: 2px; }
+  .price-note { margin-top: 18px; font-size: 0.88rem; opacity: 0.68; }
+
+  /* --- reviews --- */
+  .reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .review-card { background: var(--sand); border-radius: 4px; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
+  .review-stars { display: flex; gap: 3px; }
+  .review-stars svg { width: 15px; height: 15px; color: var(--gold); fill: var(--gold); }
+  .review-card p.quote { font-size: 0.96rem; opacity: 0.9; font-style: italic; }
+  .review-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; opacity: 0.7; }
+
+  /* --- FAQ --- */
+  .faq-item { border-bottom: 1px solid var(--line); padding: 18px 0; }
+  .faq-item summary { cursor: pointer; font-family: 'Fraunces', serif; font-size: 1.05rem; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::after { content: '+'; font-size: 1.4rem; color: var(--clay); font-family: 'Karla', sans-serif; }
+  .faq-item[open] summary::after { content: '–'; }
+  .faq-item p { margin-top: 10px; opacity: 0.8; font-size: 0.94rem; }
+
+  /* --- contacto --- */
+  .contact-wrap { background: var(--sand); border-radius: 4px; padding: 44px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  @media (max-width: 700px) { .contact-wrap { grid-template-columns: 1fr; } }
+  .contact-item { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 20px; }
+  .contact-item:last-child { margin-bottom: 0; }
+  .contact-item svg { width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px; color: var(--clay); }
+  .contact-item .label { font-size: 0.78rem; opacity: 0.6; margin-bottom: 2px; }
+  .contact-item .val { font-weight: 700; font-size: 1.0rem; }
+  .contact-cta h3 { font-size: 1.3rem; margin-bottom: 12px; }
+  .contact-cta p { opacity: 0.82; margin-bottom: 20px; }
+  .map-stub { margin-top: 22px; border: 1px dashed var(--line); border-radius: 4px; padding: 16px; font-size: 0.82rem; opacity: 0.65; display: flex; gap: 10px; align-items: center; }
+  .map-stub svg { width: 18px; height: 18px; flex-shrink: 0; }
+
+  footer { text-align: center; padding: 36px 24px 44px; font-size: 0.85rem; opacity: 0.6; }
+  footer .logo-mark.lg { margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<div class="draft-flag">DRAFT — estructura para validar. Fotos, lista de 15 lugares, precios y reseñas reales van en el próximo paso.</div>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      <svg class="logo-mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs><clipPath id="logoClipNav"><circle cx="60" cy="60" r="50"/></clipPath></defs>
+        <g clip-path="url(#logoClipNav)">
+          <rect x="10" y="10" width="100" height="100" fill="#F7E3B0"/>
+          <circle cx="75" cy="48" r="15" fill="#F4B942"/>
+          <path d="M10 70 Q35 32 60 66 T110 58 L110 110 L10 110 Z" fill="#6BA58A"/>
+          <path d="M10 86 Q40 58 67 82 T110 78 L110 110 L10 110 Z" fill="#2E5E4E"/>
+        </g>
+      </svg>
+      Sojuramaiju | Complejo Serrano
+    </div>
+    <nav class="nav-links">
+      <a href="#anfitriones">Nosotros</a>
+      <a href="#alojamiento">Alojamiento</a>
+      <a href="#zona">La zona</a>
+      <a href="#precios">Precios</a>
+      <a href="#opiniones">Opiniones</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<!-- 1. HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <span class="hero-tag">Naturaleza, paz y hogar lejos de casa</span>
+    <h1>Tu descanso en La Falda</h1>
+    <p class="lead">Un lugar para desconectar del ruido y dejarte llevar por la calma de las Sierras de Córdoba.</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="https://wa.me/5493548432149" target="_blank" rel="noopener">Consultar por WhatsApp</a>
+      <a class="btn btn-ghost" href="#alojamiento">Ver alojamientos</a>
+    </div>
+  </div>
+  <svg class="sierras" viewBox="0 0 1040 180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0,180 L0,100 L120,40 L230,110 L340,55 L460,120 L560,30 L680,105 L800,50 L920,115 L1040,60 L1040,180 Z" fill="#6BA58A" opacity="0.45"/>
+    <path d="M0,180 L0,130 L150,70 L280,140 L420,80 L540,150 L660,75 L800,145 L940,90 L1040,140 L1040,180 Z" fill="#2E5E4E" opacity="0.92"/>
+  </svg>
+</div>
+
+<!-- 2. ANFITRIONES -->
+<section id="anfitriones">
+  <div class="hosts">
+    <div class="art-panel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+    </div>
+    <div>
+      <span class="years">¿Quiénes somos? ¡Conocenos!</span>
+      <h3>Adriana y Carlos</h3>
+      <p>Somos un matrimonio que hace más de quince años recibe viajeros en La Falda con la misma dedicación del primer día. Conocemos cada rincón de la zona, por lo que estamos para ayudarte a armar tu estadía y recomendarte qué visitar, dónde comer y cómo disfrutar cada día que pases en nuestro complejo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3. ALOJAMIENTO -->
+<section id="alojamiento" style="background: var(--sand); border-radius: 4px;">
+  <div class="section-head">
+    <h2>Tres espacios, tres maneras de descansar</h2>
+    <p>Cada uno tiene su propio carácter: elegí el que mejor se ajuste a tu necesidad.</p>
+    <span class="placeholder-note">Fotos reales próximamente — hoy paneles ilustrados</span>
+  </div>
+
+  <div class="stays">
+
+    <!-- CABAÑA -->
+    <div class="stay-card">
+      <div class="gallery-wrap">
+        <div class="art-panel gallery">
+          <img src="fotos/cabana/c01.jpg" alt="Cabaña, cocina comedor">
+          <img src="fotos/cabana/c02.jpg" alt="Cabaña, dormitorio">
+          <img src="fotos/cabana/c03.jpg" alt="Cabaña, vista exterior">
+          <!-- Para sumar una foto nueva, copiá una línea de arriba y cambiá el nombre (ej: c04.jpg) -->
+        </div>
+        <button class="g-btn prev" onclick="slide(this, -1)" aria-label="Foto anterior">‹</button>
+        <button class="g-btn next" onclick="slide(this, 1)" aria-label="Foto siguiente">›</button>
+      </div>
+      <div class="body">
+        <span class="cap">Hasta 4 personas</span>
+        <h3>Cabaña El Refugio</h3>
+        <p class="desc">Pensada para no tener que salir a buscar nada: en El Refugio el hogar se muda, por unos días, a las sierras. Un ambiente completo y totalmente equipado.</p>
+        <div class="amenities">
+          <span class="amenity">Sommier Queen Size</span><span class="amenity">Sofá-cama</span><span class="amenity">Ropa de cama</span><span class="amenity">Baño privado</span><span class="amenity">Aire Acondicionado</span><span class="amenity">Heladera con Freezer</span><span class="amenity">Anafe</span><span class="amenity">Microondas</span><span class="amenity">Vajilla completa</span><span class="amenity">Smart TV 32" con DirecTV</span><span class="amenity">Desayuno Seco</span><span class="amenity">Wi-Fi</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPARTAMENTO -->
+    <div class="stay-card">
+      <div class="gallery-wrap">
+        <div class="art-panel gallery">
+          <img src="fotos/departamento/d01.jpg" alt="Departamento, comedor">
+          <img src="fotos/departamento/d02.jpg" alt="Departamento, dormitorio">
+          <img src="fotos/departamento/d03.jpg" alt="Departamento, terraza">
+          <!-- Para sumar una foto nueva, copiá una línea de arriba y cambiá el nombre (ej: d04.jpg) -->
+        </div>
+        <button class="g-btn prev" onclick="slide(this, -1)" aria-label="Foto anterior">‹</button>
+        <button class="g-btn next" onclick="slide(this, 1)" aria-label="Foto siguiente">›</button>
+      </div>
+      <div class="body">
+        <span class="cap">Hasta 5 personas</span>
+        <h3>Cabaña El Mirador</h3>
+        <p class="desc">Pensada para pasar más tiempo afuera que adentro, como si las sierras fueran un ambiente más de la cabaña. Desde la terraza y el patio, la vista al cerro te acompaña para comenzar y cerrar cada día.</p>
+        <div class="amenities">
+          <span class="amenity">Un dormitorio con cama matrimonial</span><span class="amenity">Un dormitorio con cama marinera</span><span class="amenity">Sofá-cama</span><span class="amenity">Ropa de cama</span><span class="amenity">Baño privado</span><span class="amenity">Ventilador</span><span class="amenity">Heladera con Freezer</span><span class="amenity">Anafe</span><span class="amenity">Microondas</span><span class="amenity">Vajilla completa</span><span class="amenity">TV con cable</span><span class="amenity">Desayuno seco</span><span class="amenity">Wi-Fi</span><span class="amenity">Terraza</span><span class="amenity">Patio interno con asador</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- HABITACIÓN -->
+    <div class="stay-card">
+      <div class="gallery-wrap">
+        <div class="art-panel gallery">
+          <img src="fotos/habitacion/h01.jpg" alt="Habitación, baño privado">
+          <img src="fotos/habitacion/h02.jpg" alt="Habitación, dormitorio">
+          <img src="fotos/habitacion/h03.jpg" alt="Habitación, detalle">
+          <!-- Para sumar una foto nueva, copiá una línea de arriba y cambiá el nombre (ej: h04.jpg) -->
+        </div>
+        <button class="g-btn prev" onclick="slide(this, -1)" aria-label="Foto anterior">‹</button>
+        <button class="g-btn next" onclick="slide(this, 1)" aria-label="Foto siguiente">›</button>
+      </div>
+      <div class="body">
+        <span class="cap">Hasta 2 personas</span>
+        <h3>Suite El Rincón</h3>
+        <p class="desc">Pensada para dos, con la intimidad de un espacio propio y la comodidad de tenerlo todo cerca. Un rincón en las sierras para bajar el ritmo de la rutina.</p>
+        <div class="amenities">
+          <span class="amenity">Sommier Queen Size</span><span class="amenity">Ventilador</span><span class="amenity">Ropa de cama</span><span class="amenity">Baño privado</span><span class="amenity">Frigobar</span><span class="amenity">Microondas</span><span class="amenity">Pava eléctrica</span><span class="amenity">Desayuno seco</span><span class="amenity">TV Smart con cable</span><span class="amenity">Wi-Fi</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 4. QUÉ HACER EN LA ZONA -->
+<section id="zona">
+  <div class="section-head">
+    <h2>Qué hacer en la zona</h2>
+    <p>La Falda y sus alrededores tienen mucho para explorar a pocos minutos.</p>
+    <span class="placeholder-note">Ejemplo con 6 lugares — reemplazamos por tu listado completo de 15</span>
+  </div>
+  <div class="activities">
+    <div class="activity-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 17c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0"/><path d="M6 12V4l3 2 3-2 3 2 3-2v8"/></svg>
+      <div><h4>Complejo 7 Cascadas</h4><p>A un km del departamento. Caminata entre cascadas y piletones naturales.</p></div>
+    </div>
+    <div class="activity-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      <div><h4>Centro de La Falda</h4><p>A 6 cuadras. Paseo peatonal, comercios y gastronomía local.</p></div>
+    </div>
+    <div class="activity-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+      <div><h4>Dique La Falda</h4><p>Espejo de agua para pesca y paseos en bici, a pocos minutos en auto.</p></div>
+    </div>
+    <div class="activity-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20 20 4M4 4l16 16"/></svg>
+      <div><h4>Camino al Cuadrado</h4><p>Vistas panorámicas del valle y acceso rápido al aeropuerto de Córdoba.</p></div>
+    </div>
+    <div class="activity-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2 2 22h20L12 2Z"/></svg>
+      <div><h4>Cerro La Banderita</h4><p>Sendero corto con mirador y vista a todo el valle de Punilla.</p></div>
+    </div>
+    <div class="activity-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3"/></svg>
+      <div><h4>Ex Hotel Eden</h4><p>Visita guiada histórica, uno de los hitos turísticos de La Falda.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. PRECIOS -->
+<section id="precios" style="background: var(--sand); border-radius: 4px;">
+  <div class="section-head">
+    <h2>Precios</h2>
+    <p>Temporada 2026/2027. Valores por noche vigente a Octubre/26</p>
+  </div>
+  <div class="price-tables">
+    <div class="price-card">
+      <h3>Suite El Rincón</h3>
+      <div class="price-line"><span>Temporada baja<small>Hasta el 14 de diciembre</small></span><span class="val">$70.000</span></div>
+      <div class="price-line"><span>Temporada alta<small>15 de diciembre al 14 de febrero</small></span><span class="val">$85.000</span></div>
+      <div class="price-line"><span>Temporada media<small>15 de febrero al 14 de marzo</small></span><span class="val">$80.000</span></div>
+      <div class="price-line"><span>Desde el 15 de marzo</span><span class="val">Consultar</span></div>
+    </div>
+    <div class="price-card">
+      <h3>Cabaña El Refugio</h3>
+      <div class="price-line"><span>Temporada baja<small>Hasta el 14 de diciembre</small></span><span class="val">$90.000</span></div>
+      <div class="price-line"><span>Temporada alta<small>15 de diciembre al 14 de febrero</small></span><span class="val">$110.000</span></div>
+      <div class="price-line"><span>Temporada media<small>15 de febrero al 14 de marzo</small></span><span class="val">$100.000</span></div>
+      <div class="price-line"><span>Desde el 15 de marzo</span><span class="val">Consultar</span></div>
+    </div>
+    <div class="price-card">
+      <h3>Cabaña El Mirador</h3>
+      <div class="price-line"><span>Temporada baja<small>Hasta el 14 de diciembre</small></span><span class="val">$100.000</span></div>
+      <div class="price-line"><span>Temporada alta<small>15 de diciembre al 14 de febrero</small></span><span class="val">$120.000</span></div>
+      <div class="price-line"><span>Temporada media<small>15 de febrero al 14 de marzo</small></span><span class="val">$110.000</span></div>
+      <div class="price-line"><span>Desde el 15 de marzo</span><span class="val">Consultar</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. OPINIONES -->
+<section id="opiniones">
+  <div class="section-head">
+    <h2>Lo que dicen nuestros huéspedes</h2>
+    <p>Reseñas de Booking y Google.</p>
+    <span class="placeholder-note">Textos de ejemplo — reemplazamos por tus reseñas reales</span>
+  </div>
+  <div class="reviews">
+    <div class="review-card">
+      <div class="review-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+      </div>
+      <p class="quote">Un lugar tranquilo, con anfitriones muy atentos. La pileta y el parque hicieron que los chicos no quisieran irse.</p>
+      <div class="review-meta"><span>Familia González</span><span>Booking</span></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+      </div>
+      <p class="quote">El departamento tiene una vista espectacular a las sierras. Muy limpio y bien equipado, volvemos seguro.</p>
+      <div class="review-meta"><span>Martín P.</span><span>Google</span></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+      </div>
+      <p class="quote">Adriana y Carlos son un amor, te hacen sentir en casa desde que llegás. El desayuno, riquísimo.</p>
+      <div class="review-meta"><span>Sofía R.</span><span>Booking</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. FAQ -->
+<section id="faq" style="background: var(--sand); border-radius: 4px;">
+  <div class="section-head">
+    <h2>Preguntas frecuentes</h2>
+  </div>
+  <details class="faq-item" open>
+    <summary>¿A qué hora es el check-in y el check-out?</summary>
+    <p>Check-in a partir de las 14 hs y check-out hasta las 10 hs.</p>
+  </details>
+  <details class="faq-item">
+    <summary>¿Aceptan mascotas?</summary>
+    <p>Consultar previamente, ya que está sujeto al nivel de ocupación que presenta el complejo.</p>
+  </details>
+  <details class="faq-item">
+    <summary>¿Cómo se reserva?</summary>
+    <p>Se solicita una seña del 30% del total de la estadía, a pagar por transferencia. El monto restante se abona al momento del ingreso al complejo.</p>
+  </details>
+  <details class="faq-item">
+    <summary>¿Cuál es la política de cancelación?</summary>
+    <p>La seña se devuelve sólo en caso de avisar con al menos 7 días de anticipación.</p>
+  </details>
+</section>
+
+<!-- 8. CONTACTO -->
+<section id="contacto">
+  <div class="section-head">
+    <h2>Contacto</h2>
+    <p>Estamos a tu disposición por cualquier consulta.</p>
+  </div>
+  <div class="contact-wrap">
+    <div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div><div class="label">Dirección</div><div class="val">Laprida 1033, La Falda, Córdoba</div></div>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13 1 .37 1.99.72 2.93a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.15-1.15a2 2 0 0 1 2.11-.45c.94.35 1.93.59 2.93.72A2 2 0 0 1 22 16.92Z"/></svg>
+        <div><div class="label">Teléfono</div><div class="val">(3548) 432149</div></div>
+      </div>
+      <div class="contact-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+        <div><div class="label">Email</div><div class="val">sojuramaiju@gmail.com</div></div>
+      </div>
+      <div class="map-stub">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 4v16"/></svg>
+        <span>Mapa interactivo — se agrega al publicar en dominio propio</span>
+      </div>
+    </div>
+    <div class="contact-cta">
+      <h3>Reservá o consultá disponibilidad</h3>
+      <p>La forma más rápida de recibir una respuesta es por WhatsApp — contanos las fechas y cuántas personas son.</p>
+      <a class="btn btn-primary" href="https://wa.me/5493548432149" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <svg class="logo-mark lg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <defs><clipPath id="logoClipFoot"><circle cx="60" cy="60" r="50"/></clipPath></defs>
+    <g clip-path="url(#logoClipFoot)">
+      <rect x="10" y="10" width="100" height="100" fill="#F7E3B0"/>
+      <circle cx="75" cy="48" r="15" fill="#F4B942"/>
+      <path d="M10 70 Q35 32 60 66 T110 58 L110 110 L10 110 Z" fill="#6BA58A"/>
+      <path d="M10 86 Q40 58 67 82 T110 78 L110 110 L10 110 Z" fill="#2E5E4E"/>
+    </g>
+  </svg>
+  <div>Sojuramaiju — Alquiler temporario en La Falda, Córdoba</div>
+</footer>
+
+<div class="lightbox" id="lightbox">
+  <button class="lb-btn lb-close" aria-label="Cerrar">×</button>
+  <button class="lb-btn lb-prev" aria-label="Foto anterior">‹</button>
+  <img id="lb-img" alt="">
+  <button class="lb-btn lb-next" aria-label="Foto siguiente">›</button>
+</div>
+
+<script>
+  // Flechas de cada galería: mueven la galería que tienen al lado
+  function slide(btn, dir) {
+    var g = btn.parentElement.querySelector('.gallery');
+    g.scrollBy({ left: dir * g.clientWidth, behavior: 'smooth' });
+  }
+
+  // Zoom de fotos: toma automáticamente todas las <img> dentro de cada .gallery
+  (function () {
+    var lb = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lb-img');
+    var current = [];
+    var index = 0;
+
+    function show(i) {
+      index = (i + current.length) % current.length;
+      lbImg.src = current[index].src;
+      lbImg.alt = current[index].alt;
+    }
+    function close() { lb.classList.remove('open'); }
+
+    document.querySelectorAll('.gallery').forEach(function (g) {
+      var imgs = Array.from(g.querySelectorAll('img'));
+      imgs.forEach(function (img, i) {
+        img.addEventListener('click', function () {
+          current = imgs;
+          show(i);
+          lb.classList.add('open');
+        });
+      });
+    });
+
+    lb.querySelector('.lb-close').onclick = close;
+    lb.querySelector('.lb-prev').onclick = function (e) { e.stopPropagation(); show(index - 1); };
+    lb.querySelector('.lb-next').onclick = function (e) { e.stopPropagation(); show(index + 1); };
+    lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'Escape') close();
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+  })();
+</script>
+
+</body>
+</html>
