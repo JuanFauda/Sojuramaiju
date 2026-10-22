@@ -48,9 +48,15 @@
   }
 
   header { position: sticky; top: 0; z-index: 20; background: var(--paper); border-bottom: 1px solid var(--line); }
-  .nav { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; }
-  .brand { display: flex; align-items: center; gap: 10px; font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; }
-  .brand span { color: var(--clay); }
+  .nav { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; }.brand { display: flex; align-items: center; gap: 10px; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-name { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; }
+.brand-sub { font-family: 'Karla', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.04em; color: var(--ink); opacity: 0.6; margin-top: 2px; }
+.logo-mark { width: 40px; height: 40px; flex-shrink: 0; }
+@media (max-width: 480px) {
+  .brand-name { font-size: 1.1rem; }
+  .brand-sub { font-size: 0.72rem; }
+}
   .logo-mark { width: 34px; height: 34px; flex-shrink: 0; }
   .logo-mark.lg { width: 64px; height: 64px; }
   .nav-links { display: flex; gap: 20px; font-size: 0.92rem; }
@@ -70,7 +76,6 @@
   .nav-links a { padding: 12px 0; opacity: 1; border-bottom: 1px solid var(--line); }
   .nav-links a:last-child { border-bottom: none; }
 }
-@media (max-width: 480px) { .brand { font-size: 1.05rem; } }
 
   .hero { position: relative; overflow: hidden; padding: 64px 24px 0; background: linear-gradient(180deg, var(--sand) 0%, var(--paper) 100%); }
   .hero-inner { max-width: 720px; margin: 0 auto; text-align: center; position: relative; z-index: 2; }
@@ -240,7 +245,10 @@
           <path d="M10 86 Q40 58 67 82 T110 78 L110 110 L10 110 Z" fill="#2E5E4E"/>
         </g>
       </svg>
-      Sojuramaiju | Complejo Serrano
+      <div class="brand-text">
+  <div class="brand-name">Sojuramaiju</div>
+  <div class="brand-sub">Complejo Serrano</div>
+</div>
     </div>
     <nav class="nav-links" id="nav-links">
       <a href="#anfitriones">Nosotros</a>
