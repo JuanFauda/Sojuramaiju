@@ -25,7 +25,7 @@
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
   * { box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html { scroll-behavior: smooth; scroll-padding-top: calc(80px + env(safe-area-inset-top, 0px)); }
   body {
     margin: 0;
     background: var(--paper);
@@ -47,17 +47,38 @@
     padding-top: calc(9px + env(safe-area-inset-top, 0px));
   }
 
+  /* --- header --- */
   header { position: sticky; top: 0; z-index: 20; background: var(--paper); border-bottom: 1px solid var(--line); }
   .nav { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; }
-  .brand { display: flex; align-items: center; gap: 10px; font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; }
-  .brand span { color: var(--clay); }
-  .logo-mark { width: 34px; height: 34px; flex-shrink: 0; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+  .brand-name { font-family: 'Fraunces', serif; font-size: 1.25rem; font-weight: 600; }
+  .brand-sub { font-family: 'Karla', sans-serif; font-size: 0.78rem; font-weight: 400; letter-spacing: 0.04em; color: var(--ink); opacity: 0.6; margin-top: 2px; }
+  .logo-mark { width: 40px; height: 40px; flex-shrink: 0; }
   .logo-mark.lg { width: 64px; height: 64px; }
+  @media (max-width: 480px) {
+    .brand-name { font-size: 1.1rem; }
+    .brand-sub { font-size: 0.72rem; }
+  }
   .nav-links { display: flex; gap: 20px; font-size: 0.92rem; }
   .nav-links a { text-decoration: none; opacity: 0.75; }
   .nav-links a:hover { opacity: 1; }
-  @media (max-width: 720px) { .nav-links { display: none; } }
+  .menu-btn { display: none; background: none; border: none; padding: 8px; cursor: pointer; color: var(--ink); }
+  .menu-btn svg { width: 26px; height: 26px; display: block; }
+  @media (max-width: 720px) {
+    .menu-btn { display: block; }
+    .nav-links {
+      display: none; position: absolute; top: 100%; left: 0; right: 0;
+      flex-direction: column; gap: 0;
+      background: var(--paper); border-bottom: 1px solid var(--line);
+      padding: 8px 24px 16px; font-size: 1.05rem;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 12px 0; opacity: 1; border-bottom: 1px solid var(--line); }
+    .nav-links a:last-child { border-bottom: none; }
+  }
 
+  /* --- hero --- */
   .hero { position: relative; overflow: hidden; padding: 64px 24px 0; background: linear-gradient(180deg, var(--sand) 0%, var(--paper) 100%); }
   .hero-inner { max-width: 720px; margin: 0 auto; text-align: center; position: relative; z-index: 2; }
   .hero-tag { color: var(--clay); font-size: 1.05rem; display: block; margin-bottom: 10px; font-family: 'Fraunces', serif; font-style: italic; }
@@ -145,13 +166,6 @@
   .stay-price .from { font-size: 0.78rem; opacity: 0.65; }
   .stay-price .amount { font-family: 'Fraunces', serif; font-size: 1.3rem; color: var(--clay); }
 
-  /* --- qué hacer --- */
-  .activities { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
-  .activity-card { border: 1px solid var(--line); border-radius: 4px; padding: 20px; display: flex; gap: 14px; align-items: flex-start; }
-  .activity-card svg { width: 26px; height: 26px; flex-shrink: 0; color: var(--clay); margin-top: 2px; }
-  .activity-card h4 { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 500; margin-bottom: 4px; }
-  .activity-card p { font-size: 0.9rem; opacity: 0.75; }
-
   /* --- precios --- */
   .price-tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
   .price-card { border: 1px solid var(--line); border-radius: 4px; padding: 26px; }
@@ -162,13 +176,39 @@
   .price-line small { display: block; font-size: 0.8rem; opacity: 0.65; margin-top: 2px; }
   .price-note { margin-top: 18px; font-size: 0.88rem; opacity: 0.68; }
 
-  /* --- reviews --- */
-  .reviews { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  /* --- reviews (carrusel) --- */
+  .reviews-carousel { max-width: 640px; margin: 0 auto; }
+  .reviews-stage { display: grid; }
+  .reviews-stage .review-card { grid-area: 1 / 1; opacity: 0; visibility: hidden; transition: opacity .4s ease; }
+  .reviews-stage .review-card.active { opacity: 1; visibility: visible; }
+  .reviews-controls { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: 22px; }
+  .rev-btn { width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); font-size: 1.4rem; line-height: 1; cursor: pointer; }
+  .rev-btn:active { transform: scale(0.94); }
+  .rev-dots { display: flex; gap: 8px; }
+  .rev-dot { width: 9px; height: 9px; padding: 0; border: none; border-radius: 50%; background: rgba(34,48,42,0.25); cursor: pointer; }
+  .rev-dot.active { background: var(--clay); }
   .review-card { background: var(--sand); border-radius: 4px; padding: 24px; display: flex; flex-direction: column; gap: 12px; }
   .review-stars { display: flex; gap: 3px; }
   .review-stars svg { width: 15px; height: 15px; color: var(--gold); fill: var(--gold); }
   .review-card p.quote { font-size: 0.96rem; opacity: 0.9; font-style: italic; }
   .review-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; opacity: 0.7; }
+
+  /* --- qué hacer en la zona --- */
+  .place-group { font-family: 'Fraunces', serif; font-size: 1.2rem; font-weight: 500; margin: 36px 0 16px; color: var(--pine); }
+  .place-group:first-of-type { margin-top: 0; }
+  .places { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  a.place-card { text-decoration: none; color: inherit; transition: transform .15s ease, box-shadow .15s ease; }
+  a.place-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(34,48,42,0.12); }
+  .place-card { border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--paper); display: flex; flex-direction: column; }
+  .place-photo { position: relative; height: 160px; background: linear-gradient(135deg, var(--sage) 0%, var(--pine) 100%); }
+  .place-photo::after {
+    content: ''; position: absolute; top: 10px; right: 10px; width: 32px; height: 32px; border-radius: 50%;
+    background: rgba(252,248,235,0.92) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232E5E4E' stroke-width='1.8'%3E%3Cpath d='M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E") center / 18px no-repeat;
+  }
+  .place-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .place-body { padding: 18px 20px 22px; }
+  .place-body h4 { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 500; margin: 0 0 6px; }
+  .place-body p { font-size: 0.9rem; opacity: 0.78; }
 
   /* --- FAQ --- */
   .faq-item { border-bottom: 1px solid var(--line); padding: 18px 0; }
@@ -211,21 +251,28 @@
           <path d="M10 86 Q40 58 67 82 T110 78 L110 110 L10 110 Z" fill="#2E5E4E"/>
         </g>
       </svg>
-      Sojuramaiju | Complejo serrano
+      <div class="brand-text">
+        <div class="brand-name">Sojuramaiju</div>
+        <div class="brand-sub">Complejo Serrano</div>
+      </div>
     </div>
-    <nav class="nav-links">
+    <nav class="nav-links" id="nav-links">
+      <a href="#inicio">Inicio</a>
       <a href="#anfitriones">Nosotros</a>
       <a href="#alojamiento">Alojamiento</a>
-      <a href="#zona">La zona</a>
       <a href="#precios">Precios</a>
       <a href="#opiniones">Opiniones</a>
+      <a href="#zona">La zona</a>
       <a href="#contacto">Contacto</a>
     </nav>
+    <button class="menu-btn" id="menu-btn" aria-label="Abrir menú" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
   </div>
 </header>
 
 <!-- 1. HERO -->
-<div class="hero">
+<div class="hero" id="inicio">
   <div class="hero-inner">
     <span class="hero-tag">Naturaleza, paz y hogar lejos de casa</span>
     <h1>Tu descanso en La Falda</h1>
@@ -334,43 +381,8 @@
   </div>
 </section>
 
-<!-- 4. QUÉ HACER EN LA ZONA -->
-<section id="zona">
-  <div class="section-head">
-    <h2>Qué hacer en la zona</h2>
-    <p>La Falda y sus alrededores tienen mucho para explorar a pocos minutos.</p>
-    <span class="placeholder-note">Ejemplo con 6 lugares — reemplazamos por tu listado completo de 15</span>
-  </div>
-  <div class="activities">
-    <div class="activity-card">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 17c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0"/><path d="M6 12V4l3 2 3-2 3 2 3-2v8"/></svg>
-      <div><h4>Complejo 7 Cascadas</h4><p>A un km del departamento. Caminata entre cascadas y piletones naturales.</p></div>
-    </div>
-    <div class="activity-card">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-      <div><h4>Centro de La Falda</h4><p>A 6 cuadras. Paseo peatonal, comercios y gastronomía local.</p></div>
-    </div>
-    <div class="activity-card">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-      <div><h4>Dique La Falda</h4><p>Espejo de agua para pesca y paseos en bici, a pocos minutos en auto.</p></div>
-    </div>
-    <div class="activity-card">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20 20 4M4 4l16 16"/></svg>
-      <div><h4>Camino al Cuadrado</h4><p>Vistas panorámicas del valle y acceso rápido al aeropuerto de Córdoba.</p></div>
-    </div>
-    <div class="activity-card">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2 2 22h20L12 2Z"/></svg>
-      <div><h4>Cerro La Banderita</h4><p>Sendero corto con mirador y vista a todo el valle de Punilla.</p></div>
-    </div>
-    <div class="activity-card">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3"/></svg>
-      <div><h4>Ex Hotel Eden</h4><p>Visita guiada histórica, uno de los hitos turísticos de La Falda.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- 5. PRECIOS -->
-<section id="precios" style="background: var(--sand); border-radius: 4px;">
+<!-- 4. PRECIOS -->
+<section id="precios">
   <div class="section-head">
     <h2>Precios</h2>
     <p>Temporada 2026/2027. Valores por noche vigente a Octubre/26</p>
@@ -400,56 +412,161 @@
   </div>
 </section>
 
-<!-- 6. OPINIONES -->
+<!-- 5. OPINIONES -->
 <section id="opiniones">
   <div class="section-head">
     <h2>Lo que dicen nuestros huéspedes</h2>
     <p>Reseñas de Booking y Google.</p>
     <span class="placeholder-note">Textos de ejemplo — reemplazamos por tus reseñas reales</span>
   </div>
-  <div class="reviews">
-    <div class="review-card">
-      <div class="review-stars">
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+
+  <div class="reviews-carousel" id="reviews">
+    <div class="reviews-stage">
+
+      <div class="review-card active">
+        <div class="review-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        </div>
+        <p class="quote">Un lugar tranquilo, con anfitriones muy atentos. La pileta y el parque hicieron que los chicos no quisieran irse.</p>
+        <div class="review-meta"><span>Familia González</span><span>Booking</span></div>
       </div>
-      <p class="quote">Un lugar tranquilo, con anfitriones muy atentos. La pileta y el parque hicieron que los chicos no quisieran irse.</p>
-      <div class="review-meta"><span>Familia González</span><span>Booking</span></div>
+
+      <div class="review-card">
+        <div class="review-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        </div>
+        <p class="quote">El departamento tiene una vista espectacular a las sierras. Muy limpio y bien equipado, volvemos seguro.</p>
+        <div class="review-meta"><span>Martín P.</span><span>Google</span></div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
+        </div>
+        <p class="quote">Adriana y Carlos son un amor, te hacen sentir en casa desde que llegás. El desayuno, riquísimo.</p>
+        <div class="review-meta"><span>Sofía R.</span><span>Booking</span></div>
+      </div>
+
     </div>
-    <div class="review-card">
-      <div class="review-stars">
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-      </div>
-      <p class="quote">El departamento tiene una vista espectacular a las sierras. Muy limpio y bien equipado, volvemos seguro.</p>
-      <div class="review-meta"><span>Martín P.</span><span>Google</span></div>
-    </div>
-    <div class="review-card">
-      <div class="review-stars">
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 16.5,14.5 18,22 12,18 6,22 7.5,14.5 2,9.5 9,9"/></svg>
-      </div>
-      <p class="quote">Adriana y Carlos son un amor, te hacen sentir en casa desde que llegás. El desayuno, riquísimo.</p>
-      <div class="review-meta"><span>Sofía R.</span><span>Booking</span></div>
+
+    <div class="reviews-controls">
+      <button class="rev-btn" id="rev-prev" aria-label="Reseña anterior">‹</button>
+      <div class="rev-dots" id="rev-dots"></div>
+      <button class="rev-btn" id="rev-next" aria-label="Reseña siguiente">›</button>
     </div>
   </div>
 </section>
 
+<!-- 6. QUÉ HACER EN LA ZONA -->
+<section id="zona" style="background: var(--sand); border-radius: 4px;">
+  <div class="section-head">
+    <h2>Qué hacer en la zona</h2>
+    <p>La Falda y sus alrededores tienen mucho para explorar a pocos minutos.</p>
+  </div>
+
+  <h3 class="place-group">Agua y naturaleza</h3>
+  <div class="places">
+    <a class="place-card" href="https://maps.app.goo.gl/QzVqp6NLVFKrcEWG9" target="_blank" rel="noopener" aria-label="Complejo 7 Cascadas, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/siete-cascadas.jpeg" alt="Complejo 7 Cascadas" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Complejo 7 Cascadas</h4><p>Balneario con siete cascadas que bajan del dique, dentro de un parque natural con piletas y parque acuático.</p></div>
+    </a>
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Dique+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Dique La Falda, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/dique-la-falda.jpeg" alt="Dique La Falda" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Dique La Falda</h4><p>Espejo de agua ideal para la pesca deportiva y los deportes acuáticos.</p></div>
+    </a>
+    <a class="place-card" href="https://maps.app.goo.gl/BHAjjMibaudE5U5f6" target="_blank" rel="noopener" aria-label="Cascada de Olaen, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/cascada-de-olaen.jpeg" alt="Cascada de Olaen" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Cascada de Olaen</h4><p>A 21 km del centro, con aguas cristalinas para un chapuzón y mucha tranquilidad.</p></div>
+    </a>
+    <a class="place-card" href="https://maps.app.goo.gl/xmaWVwhpMz2JG91eA" target="_blank" rel="noopener" aria-label="Parque acuático Dique Zone, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/dique-zone.jpeg" alt="Parque acuático Dique Zone" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Parque acuático Dique Zone</h4><p>Parque acuático con piletas, juegos, asadores y proveeduría, ideal para pasar un día a pura diversión.</p></div>
+    </a>
+  </div>
+
+  <h3 class="place-group">Caminatas y miradores</h3>
+  <div class="places">
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Cerro+La+Banderita+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Cerro La Banderita, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/cerro-la-banderita.jpeg" alt="Cerro La Banderita" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Cerro La Banderita</h4><p>Luego de un trekking de unas dos horas, llegá al punto más alto de La Falda para tener la mejor vista panorámica de las Sierras Chicas.</p></div>
+    </a>
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Camino+del+Drag%C3%B3n+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Camino del Dragón, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/camino-del-dragon.jpeg" alt="Camino del Dragón" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Camino del Dragón</h4><p>Sendero que une La Falda con Huerta Grande, para hacer a pie, en bici o en auto, con vistas al Valle de Punilla.</p></div>
+    </a>
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Mirador+Bella+Vista+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Mirador Bella Vista, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/mirador-bella-vista.jpeg" alt="Mirador Bella Vista" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Mirador Bella Vista</h4><p>Paseo tranquilo, ideal para disfrutar de vistas panorámicas de la ciudad.</p></div>
+    </a>
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Mirador+Padre+P%C3%ADo+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Mirador Padre Pío, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/mirador-padre-pio.jpeg" alt="Mirador Padre Pío" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Mirador Padre Pío</h4><p>Balcón natural donde la imagen abraza y protege a habitantes y visitantes.</p></div>
+    </a>
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Retiro+Betania+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Mirador Retiro Betania, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/mirador-retiro-betania.jpeg" alt="Mirador Retiro Betania" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Mirador Retiro Betania</h4><p>Gruta de la Virgen de los Pobres, al borde de una lomada del barrio Santa Rosa, con lindas vistas de La Falda.</p></div>
+    </a>
+  </div>
+
+  <h3 class="place-group">Historia y cultura</h3>
+  <div class="places">
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Hotel+Ed%C3%A9n+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Hotel Edén, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/hotel-eden.jpeg" alt="Hotel Edén" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Hotel Edén</h4><p>Hotel fundado en 1898 que dio origen a la ciudad, con visitas guiadas diurnas y nocturnas.</p></div>
+    </a>
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Museo+de+la+Infancia+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Museo de la Infancia, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/museo-de-la-infancia.jpeg" alt="Museo de la Infancia" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Museo de la Infancia</h4><p>Dentro del Edén, con unas 2.000 piezas de juguetes y revistas que despiertan nostalgia.</p></div>
+    </a>
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Museo+Arqueol%C3%B3gico+Ambato+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Museo Arqueológico Ambato, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/museo-ambato.jpeg" alt="Museo Arqueológico Ambato" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Museo Arqueológico Ambato</h4><p>Más de 300 piezas pertenecientes a diferentes culturas aborígenes.</p></div>
+    </a>
+  </div>
+
+  <h3 class="place-group">Fe y espiritualidad</h3>
+  <div class="places">
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Capilla+Sagrado+Coraz%C3%B3n+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Capilla Sagrado Corazón, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/capilla-sagrado-corazon.jpeg" alt="Capilla Sagrado Corazón" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Capilla Sagrado Corazón</h4><p>Primera capilla de la zona (1927), de piedra granítica y grandes vitrales, Monumento Histórico Municipal.</p></div>
+    </a>
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Santuario+Eucar%C3%ADstico+Sant%C3%ADsimo+Sacramento+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Santuario Eucarístico Santísimo Sacramento, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/santuario-santisimo-sacramento.jpeg" alt="Santuario Eucarístico Santísimo Sacramento" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Santuario Eucarístico Santísimo Sacramento</h4><p>Templo de 1948 que se ve desde toda la ciudad, con subida al campanario para una vista panorámica.</p></div>
+    </a>
+  </div>
+
+  <h3 class="place-group">Aventura</h3>
+  <div class="places">
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Parque+a%C3%A9reo+Ed%C3%A9n+Vida+Man%C3%A1+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Parque aéreo Edén Vida Maná, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/parque-aereo-vida-mana.jpeg" alt="Parque aéreo Edén Vida Maná" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Parque aéreo Edén Vida Maná</h4><p>Tirolesas, arborismo, arquería y palestra de escalada, con juegos desde los 3 años.</p></div>
+    </a>
+    <a class="place-card" href="https://www.google.com/maps/search/?api=1&query=Cavernas+El+Sauce+La+Falda+C%C3%B3rdoba" target="_blank" rel="noopener" aria-label="Cavernas El Sauce, ver en el mapa">
+      <div class="place-photo"><img src="fotos/lugares/cavernas-el-sauce.jpeg" alt="Cavernas El Sauce" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="place-body"><h4>Cavernas El Sauce</h4><p>Con una duración de una hora y quince minutos aproximadamente, y un recorrido de dificultad media, tu visita a la caverna se transformará en una experiencia inolvidable.</p></div>
+    </a>
+  </div>
+</section>
+
 <!-- 7. FAQ -->
-<section id="faq" style="background: var(--sand); border-radius: 4px;">
+<section id="faq">
   <div class="section-head">
     <h2>Preguntas frecuentes</h2>
   </div>
-  <details class="faq-item" open>
+  <details class="faq-item">
     <summary>¿A qué hora es el check-in y el check-out?</summary>
     <p>Check-in a partir de las 14 hs y check-out hasta las 10 hs.</p>
   </details>
@@ -510,7 +627,7 @@
       <path d="M10 86 Q40 58 67 82 T110 78 L110 110 L10 110 Z" fill="#2E5E4E"/>
     </g>
   </svg>
-  <div>Sojuramaiju — Alquiler temporario en La Falda, Córdoba</div>
+  <div>Sojuramaiju — Complejo Serrano | La Falda, Córdoba</div>
 </footer>
 
 <div class="lightbox" id="lightbox">
@@ -562,6 +679,59 @@
       if (e.key === 'ArrowLeft') show(index - 1);
       if (e.key === 'ArrowRight') show(index + 1);
     });
+  })();
+
+  // Menú de hamburguesa (celular)
+  (function () {
+    var menuBtn = document.getElementById('menu-btn');
+    var navLinks = document.getElementById('nav-links');
+    menuBtn.addEventListener('click', function () {
+      var open = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open);
+    });
+    navLinks.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        navLinks.classList.remove('open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+      });
+    });
+  })();
+
+  // Carrusel de reseñas
+  (function () {
+    var cards = Array.from(document.querySelectorAll('#reviews .review-card'));
+    var dotsBox = document.getElementById('rev-dots');
+    var current = 0;
+
+    cards.forEach(function (_, i) {
+      var d = document.createElement('button');
+      d.className = 'rev-dot';
+      d.setAttribute('aria-label', 'Ir a la reseña ' + (i + 1));
+      d.addEventListener('click', function () { go(i); });
+      dotsBox.appendChild(d);
+    });
+    var dots = Array.from(dotsBox.children);
+
+    function go(i) {
+      current = (i + cards.length) % cards.length;
+      cards.forEach(function (c, k) { c.classList.toggle('active', k === current); });
+      dots.forEach(function (d, k) { d.classList.toggle('active', k === current); });
+    }
+
+    document.getElementById('rev-prev').onclick = function () { go(current - 1); };
+    document.getElementById('rev-next').onclick = function () { go(current + 1); };
+
+    var startX = null;
+    var stage = document.querySelector('#reviews .reviews-stage');
+    stage.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend', function (e) {
+      if (startX === null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 40) go(current + (dx < 0 ? 1 : -1));
+      startX = null;
+    });
+
+    go(0);
   })();
 </script>
 
