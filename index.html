@@ -166,6 +166,18 @@
   .stay-price .from { font-size: 0.78rem; opacity: 0.65; }
   .stay-price .amount { font-family: 'Fraunces', serif; font-size: 1.3rem; color: var(--clay); }
 
+    /* --- instalaciones --- */
+  .stays.facilities { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+  .services { margin-top: 36px; background: var(--pine); color: var(--paper); border-radius: 4px; padding: 36px 32px; }
+  .services h3 { font-size: 1.35rem; color: #fff; }
+  .services .services-intro { margin-top: 8px; opacity: 0.85; max-width: 520px; }
+  .services-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 20px; margin: 26px 0 24px; }
+  .service-item { border-top: 1px solid rgba(252,248,235,0.3); padding-top: 14px; }
+  .service-item h4 { font-family: 'Fraunces', serif; font-size: 1.05rem; font-weight: 500; margin: 0 0 4px; color: #fff; }
+  .service-item p { font-size: 0.9rem; opacity: 0.8; }
+  .services-note { font-size: 0.88rem; opacity: 0.75; margin-bottom: 18px; }
+  .btn-light { background: var(--paper); color: var(--pine); }
+
   /* --- precios --- */
   .price-tables { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
   .price-card { border: 1px solid var(--line); border-radius: 4px; padding: 26px; }
@@ -258,6 +270,7 @@
       <a href="#inicio">Inicio</a>
       <a href="#anfitriones">Nosotros</a>
       <a href="#alojamiento">Alojamiento</a>
+      <a href="#instalaciones">Instalaciones</a>
       <a href="#precios">Precios</a>
       <a href="#opiniones">Opiniones</a>
       <a href="#zona">La zona</a>
@@ -379,8 +392,116 @@
   </div>
 </section>
 
+<!-- 3b. INSTALACIONES -->
+<section id="instalaciones">
+  <div class="section-head">
+    <h2>Instalaciones para disfrutar</h2>
+    <p>Pileta, quincho, parque y cochera cubierta: espacios pensados para que disfrutes del complejo sin tener que salir.</p>
+  </div>
+
+  <div class="stays facilities">
+
+    <!-- PILETA -->
+    <div class="stay-card">
+      <div class="gallery-wrap">
+        <div class="art-panel gallery">
+          <img src="fotos/instalaciones/pileta01.jpeg" alt="Pileta con solárium y vista a las sierras" loading="lazy" onerror="this.style.display='none'">
+          <img src="fotos/instalaciones/pileta02.jpeg" alt="Pileta, solárium con reposeras" loading="lazy" onerror="this.style.display='none'">
+          <img src="fotos/instalaciones/pileta03.jpeg" alt="Pileta, vista a las sierras" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <button class="g-btn prev" onclick="slide(this, -1)" aria-label="Foto anterior">‹</button>
+        <button class="g-btn next" onclick="slide(this, 1)" aria-label="Foto siguiente">›</button>
+      </div>
+      <div class="body">
+        <span class="cap">Con vista a las sierras</span>
+        <h3>Pileta y solárium</h3>
+        <p class="desc">Un lugar para refrescarte y desconectar con las sierras de fondo. A los costados, dos espacios de solárium con reposeras para tomar sol sin apuro.</p>
+        <div class="amenities">
+          <span class="amenity">Solárium</span><span class="amenity">Reposeras</span><span class="amenity">Vista a las sierras</span><span class="amenity">7 × 3 m</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUINCHO -->
+    <div class="stay-card">
+      <div class="gallery-wrap">
+        <div class="art-panel gallery">
+          <img src="fotos/instalaciones/quincho01.jpeg" alt="Quincho con asador" loading="lazy" onerror="this.style.display='none'">
+          <img src="fotos/instalaciones/quincho02.jpeg" alt="Quincho, tablón con bancos" loading="lazy" onerror="this.style.display='none'">
+          <img src="fotos/instalaciones/quincho03.jpeg" alt="Quincho, asador y plancheta" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <button class="g-btn prev" onclick="slide(this, -1)" aria-label="Foto anterior">‹</button>
+        <button class="g-btn next" onclick="slide(this, 1)" aria-label="Foto siguiente">›</button>
+      </div>
+      <div class="body">
+        <span class="cap">Para compartir</span>
+        <h3>Quincho con asador</h3>
+        <p class="desc">Asador totalmente equipado, con plancheta y disco para cocinar lo que quieras, y un tablón con bancos para disfrutar la comida en grupo.</p>
+        <div class="amenities">
+          <span class="amenity">Asador equipado</span><span class="amenity">Plancheta</span><span class="amenity">Disco</span><span class="amenity">Tablón con bancos</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- PARQUE -->
+    <div class="stay-card">
+      <div class="gallery-wrap">
+        <div class="art-panel gallery">
+          <img src="fotos/instalaciones/parque01.jpeg" alt="Parque del complejo" loading="lazy" onerror="this.style.display='none'">
+          <img src="fotos/instalaciones/parque02.jpeg" alt="Parque, espacio verde" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <button class="g-btn prev" onclick="slide(this, -1)" aria-label="Foto anterior">‹</button>
+        <button class="g-btn next" onclick="slide(this, 1)" aria-label="Foto siguiente">›</button>
+      </div>
+      <div class="body">
+        <span class="cap">Al aire libre</span>
+        <h3>Parque</h3>
+        <p class="desc">Un espacio verde para caminar, jugar y descansar al aire libre, en pleno entorno serrano.</p>
+        <div class="amenities">
+          <span class="amenity">Espacio verde</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- COCHERA -->
+    <div class="stay-card">
+      <div class="gallery-wrap">
+        <div class="art-panel gallery">
+          <img src="fotos/instalaciones/cochera01.jpeg" alt="Cochera cubierta" loading="lazy" onerror="this.style.display='none'">
+          <img src="fotos/instalaciones/cochera02.jpeg" alt="Cochera cubierta dentro del predio" loading="lazy" onerror="this.style.display='none'">
+        </div>
+        <button class="g-btn prev" onclick="slide(this, -1)" aria-label="Foto anterior">‹</button>
+        <button class="g-btn next" onclick="slide(this, 1)" aria-label="Foto siguiente">›</button>
+      </div>
+      <div class="body">
+        <span class="cap">Estacionamiento</span>
+        <h3>Cochera cubierta</h3>
+        <p class="desc">Un lugar techado dentro del predio para dejar el vehículo resguardado durante toda la estadía.</p>
+        <div class="amenities">
+          <span class="amenity">Cubierta</span><span class="amenity">Dentro del predio</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SERVICIOS ADICIONALES -->
+  <div class="services">
+    <h3>Servicios adicionales</h3>
+    <p class="services-intro">Para completar la estadía, también podés disfrutar de bebidas y comidas sin salir del complejo.</p>
+    <div class="services-list">
+      <div class="service-item"><h4>Bebidas y licuados</h4><p>Para acompañar la pileta y el sol.</p></div>
+      <div class="service-item"><h4>Tragos</h4><p>Para brindar al atardecer.</p></div>
+      <div class="service-item"><h4>Picadas y comidas</h4><p>Para compartir en el quincho.</p></div>
+    </div>
+    <p class="services-note">Estos servicios están sujetos a disponibilidad: consultá con anticipación.</p>
+    <a class="btn btn-light" href="https://wa.me/5493548432149?text=Hola!%20Quisiera%20consultar%20por%20los%20servicios%20de%20bebidas%20y%20comidas." target="_blank" rel="noopener">Consultar disponibilidad</a>
+  </div>
+</section>
+
+  
 <!-- 4. PRECIOS -->
-<section id="precios">
+<section id="precios" style="background: var(--sand); border-radius: 4px;">
   <div class="section-head">
     <h2>Precios</h2>
     <p>Temporada 2026/2027. Valores por noche vigente a Octubre/26</p>
